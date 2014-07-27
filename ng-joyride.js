@@ -283,11 +283,11 @@
 
     }]);
 
-    drctv.directive('fkJoyRide', ['$http', '$timeout', '$location', '$window', '$templateCache', '$http', '$q' , '$compile', '$sce', 'joyrideFn', 'joyrideTitle', 'joyrideElement', 'joyrideLocationChange', function ($http, $timeout, $location, $window, $templateCache, $http, $q, $compile, $sce, joyrideFn, joyrideTitle, joyrideElement, joyrideLocationChange) {
+    drctv.directive('ngJoyRide', ['$http', '$timeout', '$location', '$window', '$templateCache', '$http', '$q' , '$compile', '$sce', 'joyrideFn', 'joyrideTitle', 'joyrideElement', 'joyrideLocationChange', function ($http, $timeout, $location, $window, $templateCache, $http, $q, $compile, $sce, joyrideFn, joyrideTitle, joyrideElement, joyrideLocationChange) {
         return {
             restrict: "A",
             scope: {
-                'fkJoyRide': '=',
+                'ngJoyRide': '=',
                 'config': '=',
                 'onFinish': '&',
                 'onSkip': '&'
@@ -326,7 +326,7 @@
                     steps[currentStepCount].cleanUp();
                     dropCurtain(false);
                     $timeout(function () {
-                        scope.fkJoyRide = false;
+                        scope.ngJoyRide = false;
                     });
                 }
                 function goToPrev() {
@@ -379,7 +379,7 @@
 
                 }
 
-                scope.$watch('fkJoyRide', function (newval, oldval) {
+                scope.$watch('ngJoyRide', function (newval, oldval) {
                     if(newval){
                         currentStepCount = 0;
                         dropCurtain(true);
