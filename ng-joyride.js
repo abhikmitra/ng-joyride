@@ -73,10 +73,18 @@
             function generate() {
                 $fkEl = $(this.selector);
                 _highlightElement.call(this);
+                handleClicksOnElement();
                 return _generateHtml.call(this).then(angular.bind(this, _generatePopover)).then(angular.bind(this, _showTooltip));
 
-            }
 
+
+            }
+            function handleClicksOnElement(){
+                $fkEl.click(function(event){
+                    event.stopPropagation();
+                    event.preventDefault();
+                });
+            }
             function _generateHtml() {
 
                 var promise = this.loadTemplateFn(this.template);
@@ -91,7 +99,8 @@
                     template: html,
                     content: this.popoverTemplate,
                     html: true,
-                    placement: this.placement
+                    placement: this.placement,
+                    trigger:'manual'
                 });
                 if (this.scroll) {
                     _scrollToElement.call(this,this.selector);
