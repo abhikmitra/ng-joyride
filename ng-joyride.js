@@ -63,9 +63,9 @@
                     $fkEl.popover('show');
                     $timeout(function () {
 
-                        $('.nextBtn').click(self.goToNextFn);
-                        $('.prevBtn').click(self.goToPrevFn);
-                        $('.skipBtn').click(self.skipDemoFn);
+                        $('.nextBtn').one("click",self.goToNextFn);
+                        $('.prevBtn').one("click",self.goToPrevFn);
+                        $('.skipBtn').one("click",self.skipDemoFn);
                     });
                 }, 500);
             }
@@ -79,11 +79,12 @@
 
 
             }
+            function stopEvent(event){
+                event.stopPropagation();
+                event.preventDefault();
+            }
             function handleClicksOnElement(){
-                $fkEl.click(function(event){
-                    event.stopPropagation();
-                    event.preventDefault();
-                });
+                $fkEl.on("click",stopEvent);
             }
             function _generateHtml() {
 
@@ -133,6 +134,7 @@
 
             function cleanUp() {
                 _unhighlightElement.call(this);
+                $fkEl.off("click",stopEvent);
                 $($fkEl).popover('destroy');
 
 
@@ -191,9 +193,12 @@
                     $('.nextBtn').html("Next&nbsp;<i class='glyphicon glyphicon-chevron-right'>");
                 }
                 $fkEl.slideDown(100, function () {
-                    $('.nextBtn').click(self.goToNextFn);
-                    $('.skipBtn').click(self.skipDemoFn);
-                    $('.prevBtn').click(self.goToPrevFn);
+                    $('.nextBtn').one("click",self.goToNextFn);
+                    $('.skipBtn').one("click",self.skipDemoFn);
+                    $('.prevBtn').one("click",self.goToPrevFn);
+
+
+
                 });
             }
 
@@ -309,7 +314,7 @@
                     config : scope.config,
                     templateUri: attrs.templateUri
                 };
-                initializeJoyride();
+
 
 
                 function hasReachedEnd() {
@@ -390,12 +395,20 @@
 
                 scope.$watch('ngJoyRide', function (newval, oldval) {
                     if(newval){
+                        destroyJoyride();
+                        initializeJoyride();
                         currentStepCount = 0;
                         dropCurtain(true);
                         cleanUpPreviousStep();
                         generateStep();
                     }
                 });
+                function destroyJoyride(){
+                    steps.forEach(function(elem){
+                        elem.cleanUp();
+                    });
+                    dropCurtain(false);
+                }
                 function cleanUpPreviousStep() {
                     if(currentStepCount!==0){
                         steps[currentStepCount-1].cleanUp();
