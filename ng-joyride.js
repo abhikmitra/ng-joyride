@@ -24,7 +24,7 @@
         );
     }]);
     drctv.factory('joyrideElement', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
-        function Element(config, currentStep, template, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn,isEnd) {
+        function Element(config, currentStep, template, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn,isEnd, curtainClass , addClassToCurtain) {
             this.currentStep = currentStep;
             this.content = $sce.trustAsHtml(config.text);
             this.selector = config.selector;
@@ -41,6 +41,8 @@
             this.goToPrevFn = goToPrevFn;
             this.hasReachedEndFn = hasReachedEndFn;
             this.type = "element";
+            this.curtainClass = curtainClass;
+            this.addClassToCurtain = addClassToCurtain;
             function _generateTextForNext() {
 
                 if (isEnd) {
@@ -74,6 +76,7 @@
                 $fkEl = $(this.selector);
                 _highlightElement.call(this);
                 handleClicksOnElement();
+                this.addClassToCurtain(this.curtainClass);
                 return _generateHtml.call(this).then(angular.bind(this, _generatePopover)).then(angular.bind(this, _showTooltip));
 
 
@@ -152,7 +155,7 @@
     }]);
     drctv.factory('joyrideTitle', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
 
-        function Title(config, currentStep, scope, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn) {
+        function Title(config, currentStep, scope, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn, curtainClass, addClassToCurtain) {
             this.currentStep = currentStep;
             this.heading = config.heading;
             this.content = $sce.trustAsHtml(config.text);
@@ -166,7 +169,8 @@
             this.goToPrevFn = goToPrevFn;
             this.scope = scope;
             this.type = "title"
-
+            this.curtainClass = curtainClass;
+            this.addClassToCurtain = addClassToCurtain;
 
         }
 
@@ -176,6 +180,7 @@
             function generateTitle() {
                 $('body').append(this.titleMainDiv);
                 $fkEl = $(this.titleTemplateIdSelector);
+                this.addClassToCurtain(this.curtainClass);
                 var promise = this.loadTemplateFn(this.titleTemplate);
                 promise.then(angular.bind(this,_compilePopover));
 
@@ -316,7 +321,7 @@
                 };
 
 
-
+                var $fkEl;
                 function hasReachedEnd() {
                     return currentStepCount === (steps.length - 1);
                 }
@@ -372,7 +377,7 @@
 
                 function dropCurtain(shouldDrop) {
                     var curtain;
-                    var $fkEl = $('#ng-curtain');
+                    $fkEl = $('#ng-curtain');
                     if (shouldDrop) {
                         if ($fkEl.size() === 0) {
                             $('body').append('<div id="ng-curtain"></div>');
@@ -433,7 +438,13 @@
 
                     }
                 }
+                function changeCurtainClass(className){
+                    $fkEl.removeClass();
+                    if(className){
+                        $fkEl.addClass(className);
+                    }
 
+                }
                 function initializeJoyride() {
                     var count = -1;
                     steps = options.config.map(function (step) {
@@ -443,10 +454,11 @@
                                 return new joyrideLocationChange(step, count);
 
                             case "element":
-                                return new joyrideElement(step, count, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1));
+
+                                return new joyrideElement(step, count, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1),step.curtainClass,changeCurtainClass);
 
                             case "title":
-                                return new joyrideTitle(step, count, scope, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo);
+                                return new joyrideTitle(step, count, scope, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, step.curtainClass,changeCurtainClass);
 
                             case "function":
                                 return new joyrideFn(step, count);

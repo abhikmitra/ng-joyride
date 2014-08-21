@@ -107,7 +107,7 @@ $scope.config = [
                 type: "title",
                 heading: "Welcome to the NG-Joyride demo",
                 text: '<div class="row"><div id="title-text" class="col-md-12"><span class="main-text">Welcome to <strong>Ng Joyride Demo</strong></span><br><span>( This demo will walk you through the features of Ng-Joyride. )</span><br/><br/><span class="small"><em>This can have custom html too !!!</em></span></div></div>'
-
+                 curtainClass : 'myCustomClass' //this is optional.
             }
         ];
 ```
@@ -120,6 +120,7 @@ The `title` element generates a box that looks like below.
 * `heading` : Custom heading that you want the title box to have.
 * `text` : Text or HTML can be passed
 * `titleTemplate` ( Optional ) : You can pass a templateURL that can be used in case you don't want the default template.This will be a url that can be loaded either from the $templateCache or through AJAX if its not present in the cache.
+* `curtainClass` ( Optional ) : You can use this to pass your custom class to the joyride background.This is useful where you want the background to change in each step.
    
 #####&nbsp;&nbsp; Custom `titleTemplate`. The custom title template should have the following placeholder.    
 
@@ -148,7 +149,8 @@ $scope.config = [
                 heading: "Title can have <em>HTML</em>",
                 text: "You are in the <em>home page.</em>",
                 placement: "bottom",
-                scroll: true
+                scroll: true,
+                curtainClass : 'myCustomClass' //this is optional.
             }
         ];
 ```
@@ -164,7 +166,8 @@ The `element` joyride-element generates a box that looks like below.
 * `text` : Text or HTML can be passed
 * `placement` ( Optional ) : Where the popover will be placed.Similar to bootstrap popover placements. The possible values are "top|bottom|right|left".
 * `scroll` : Whether you want, the page to be scrolled to the particular element.
-   
+* `curtainClass` ( Optional ) : You can use this to pass your custom class to the joyride background.This is useful where you want the background to change in each step.
+
 #####&nbsp;&nbsp; Custom `element Template`. Unlike `titleTemplate`, where each `joyride-element` can have its own `titleTemplate` ,the custom element template will have a common template.
 
 ```sh
