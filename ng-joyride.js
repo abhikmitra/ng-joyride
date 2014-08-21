@@ -226,9 +226,14 @@
     }]);
     drctv.factory('joyrideFn', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
 
-        function Fn(config, currentStep) {
+        function Fn(config, currentStep, parent) {
             this.currentStep = currentStep;
-            this.func = config.fn;
+            if(angular.isString(config.fn)){
+                this.func = parent[config.fn];
+            } else {
+                this.func = config.fn;
+            }
+
             this.type = "function"
 
 
@@ -461,7 +466,7 @@
                                 return new joyrideTitle(step, count, scope, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, step.curtainClass,changeCurtainClass);
 
                             case "function":
-                                return new joyrideFn(step, count);
+                                return new joyrideFn(step, count, scope.$parent);
 
                         }
 

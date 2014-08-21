@@ -223,7 +223,7 @@ This is required where your need to run some function for your dom element to ge
 $scope.config = [
         {
                 type: "function",
-                fn: openModalForDemo
+                fn: openModalForDemo //(can also be a string, which will be evaluated on the scope)
             }
         ];
 ```
@@ -241,7 +241,7 @@ This is important, for the 'previous' button to work .
 ####Properties
 
 * `type` : Should be a string `function`
-* `fn` : pass the actual function reference.
+* `fn` : pass the actual function reference.Or you can pass a function name as string. If you pass a string then it will be resolved on the scope .
 
 
 
