@@ -1,6 +1,6 @@
 {
     "name": "ng-joyride",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "dependencies": {
         "angular": "*",
         "jquery": "~1.10.2",
