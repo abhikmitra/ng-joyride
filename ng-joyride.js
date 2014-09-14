@@ -20,11 +20,11 @@
             "<div class=\"popover ng-joyride sharp-borders\"> <div class=\"arrow\"></div>   <h3 class=\"popover-title sharp-borders\"></h3> <div class=\"popover-content container-fluid\"></div></div>"
         );
         $templateCache.put('ng-joyride-title-tplv1.html',
-            "<div id=\"ng-joyride-title-tplv1\"><div class=\"ng-joyride sharp-borders intro-banner\" style=\"\"><div class=\"popover-inner\"><h3 class=\"popover-title sharp-borders\">{{heading}}</h3><div class=\"popover-content container-fluid\"><div ng-bind-html=\"content\"></div><hr><div class=\"row\"><div class=\"col-md-4 skip-class\"><a class=\"skipBtn pull-left\" type=\"button\"><i class=\"glyphicon glyphicon-ban-circle\"></i>&nbsp; Skip</a></div><div class=\"col-md-8\"><div class=\"pull-right\"><button disabled=\"disabled\" class=\"prevBtn btn\" type=\"button\"><i class=\"glyphicon glyphicon-chevron-left\"></i>&nbsp;Previous</button> <button id=\"nextTitleBtn\" class=\"nextBtn btn btn-primary\" type=\"button\">Next&nbsp;<i class=\"glyphicon glyphicon-chevron-right\"></i></button></div></div></div></div></div></div></div>"
+            "<div id=\"ng-joyride-title-tplv1\"><div class=\"ng-joyride sharp-borders intro-banner\" style=\"\"><div class=\"popover-inner\"><h3 class=\"popover-title sharp-borders\">{{heading}}</h3><div class=\"popover-content container-fluid\"><div ng-bind-html=\"content\"></div><hr><div class=\"row\"><div class=\"col-md-4 skip-class\"><a class=\"skipBtn pull-left\" type=\"button\"><i class=\"glyphicon glyphicon-ban-circle\"></i>&nbsp; Skip</a></div><div class=\"col-md-8\"><div class=\"pull-right\"><button class=\"prevBtn btn\" type=\"button\"><i class=\"glyphicon glyphicon-chevron-left\"></i>&nbsp;Previous</button> <button id=\"nextTitleBtn\" class=\"nextBtn btn btn-primary\" type=\"button\">Next&nbsp;<i class=\"glyphicon glyphicon-chevron-right\"></i></button></div></div></div></div></div></div></div>"
         );
     }]);
     drctv.factory('joyrideElement', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
-        function Element(config, currentStep, template, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn,isEnd, curtainClass , addClassToCurtain) {
+        function Element(config, currentStep, template, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn,isEnd, curtainClass , addClassToCurtain, shouldDisablePrevious) {
             this.currentStep = currentStep;
             this.content = $sce.trustAsHtml(config.text);
             this.selector = config.selector;
@@ -43,6 +43,7 @@
             this.type = "element";
             this.curtainClass = curtainClass;
             this.addClassToCurtain = addClassToCurtain;
+            this.shouldDisablePrevious = shouldDisablePrevious;
             function _generateTextForNext() {
 
                 if (isEnd) {
@@ -68,6 +69,9 @@
                         $('.nextBtn').one("click",self.goToNextFn);
                         $('.prevBtn').one("click",self.goToPrevFn);
                         $('.skipBtn').one("click",self.skipDemoFn);
+                        if(self.shouldDisablePrevious){
+                            $('.prevBtn').prop('disabled', true);
+                        }
                     });
                 }, 500);
             }
@@ -155,7 +159,8 @@
     }]);
     drctv.factory('joyrideTitle', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
 
-        function Title(config, currentStep, scope, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn, curtainClass, addClassToCurtain) {
+        function Title(config, currentStep, scope, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn, curtainClass, addClassToCurtain, shouldDisablePrevious) {
+
             this.currentStep = currentStep;
             this.heading = config.heading;
             this.content = $sce.trustAsHtml(config.text);
@@ -171,7 +176,7 @@
             this.type = "title"
             this.curtainClass = curtainClass;
             this.addClassToCurtain = addClassToCurtain;
-
+            this.shouldDisablePrevious = shouldDisablePrevious;
         }
 
         Title.prototype = (function () {
@@ -202,6 +207,9 @@
                     $('.skipBtn').one("click",self.skipDemoFn);
                     $('.prevBtn').one("click",self.goToPrevFn);
 
+                    if(self.shouldDisablePrevious){
+                        $('.prevBtn').prop('disabled', true);
+                    }
 
 
                 });
@@ -451,7 +459,7 @@
 
                 }
                 function initializeJoyride() {
-                    var count = -1;
+                    var count = -1,isFirst = true,disablePrevious;
                     steps = options.config.map(function (step) {
                         count++;
                         switch (step.type) {
@@ -459,11 +467,15 @@
                                 return new joyrideLocationChange(step, count);
 
                             case "element":
+                                disablePrevious = isFirst
+                                isFirst = isFirst ? false:false;
 
-                                return new joyrideElement(step, count, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1),step.curtainClass,changeCurtainClass);
+                                return new joyrideElement(step, count, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1),step.curtainClass,changeCurtainClass, disablePrevious);
 
                             case "title":
-                                return new joyrideTitle(step, count, scope, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, step.curtainClass,changeCurtainClass);
+                                disablePrevious = isFirst;
+                                isFirst = isFirst ? false:false;
+                                return new joyrideTitle(step, count, scope, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, step.curtainClass,changeCurtainClass,disablePrevious);
 
                             case "function":
                                 return new joyrideFn(step, count, scope.$parent);
