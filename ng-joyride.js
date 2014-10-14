@@ -164,8 +164,7 @@
             this.currentStep = currentStep;
             this.heading = config.heading;
             this.content = $sce.trustAsHtml(config.text);
-            this.titleMainDiv = '<div id="ng-joyride-title" class="ng-joyride-title"></div>';
-            this.titleTemplateIdSelector = '#ng-joyride-title';
+            this.titleMainDiv = '<div class="ng-joyride-title"></div>';
             this.loadTemplateFn = loadTemplateFn;
             this.titleTemplate = config.titleTemplate || defaultTitleTemplate;
             this.hasReachedEndFn = hasReachedEndFn;
@@ -183,8 +182,8 @@
             var $fkEl;
 
             function generateTitle() {
-                $('body').append(this.titleMainDiv);
-                $fkEl = $(this.titleTemplateIdSelector);
+                $fkEl = $(this.titleMainDiv);
+                $('body').append($fkEl);
                 this.addClassToCurtain(this.curtainClass);
                 var promise = this.loadTemplateFn(this.titleTemplate);
                 promise.then(angular.bind(this,_compilePopover));
