@@ -39,6 +39,11 @@ There is one directive called `ng-joy-ride` which can be used as an attribute.
 ####ng-joy-ride   
 You can invoke the joyride from anywhere by setting (in this case) `startJoyRide` to true.The scope variable that you bind to `ng-joy-ride` is the one that will control the start of the joyride. Once the joyride is complete , the scope variable gets set to false.So on completeion of the joyride `startJoyRide` will be set to false     
 
+
+### Stopping the Joyride
+
+The joyride stops when, the user presses "skip", "finish" or when  you programamtically set `startJoyRide` to false.Setting `startJoyRide` to false when the joyride is on , will have the same effect as skip.
+
 --------
 
 ### Configuring the joyride
