@@ -371,23 +371,30 @@
                 }
                 function goToPrev() {
                     steps[currentStepCount].cleanUp();
-                    var previousStep = steps[currentStepCount - 1];
-                    if (previousStep.type === "location_change") {
-                        scope.$evalAsync(function () {
-                            previousStep.rollback();
-                        });
-                        currentStepCount = currentStepCount - 2;
-                        $timeout(generateStep, 100);
+                    var requires_timeout = false;
+                    currentStepCount -= 1;
 
-                    } else if (previousStep.type === "function") {
-                        previousStep.rollback();
-                        currentStepCount = currentStepCount - 2;
-                        $timeout(generateStep, 100);
-                    } else {
-                        currentStepCount--;
-                        generateStep();
+                    // Rollback previous steps until we hit a title or element.
+                    while ((steps[currentStepCount].type === "location_change" || steps[currentStepCount].type === "function")
+                            && currentStepCount >= 1) {
+                        requires_timeout = true;
+                        if (steps[currentStepCount].type == "location_change") {
+                            scope.$evalAsync(function () {
+                                steps[currentStepCount].rollback();
+                            })
+                        }
+                        else {
+                            steps[currentStepCount].rollback();
+                        }
+                        currentStepCount -= 1;
                     }
 
+                    if (requires_timeout) {
+                        $timeout(generateStep, 100);
+                    }
+                    else {
+                        generateStep();
+                    }
                 }
 
                 function skipDemo() {
