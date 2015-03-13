@@ -336,10 +336,6 @@
             link: function (scope, element, attrs) {
                 var steps = [];
                 var currentStepCount = 0;
-                var options = {
-                    config : scope.config,
-                    templateUri: attrs.templateUri
-                };
 
 
                 var $fkEl;
@@ -476,6 +472,11 @@
 
                 }
                 function initializeJoyride() {
+                    var options = {
+                        config : scope.config,
+                        templateUri: attrs.templateUri
+                    };
+                    
                     var count = -1,isFirst = true,disablePrevious;
                     steps = options.config.map(function (step) {
                         count++;
