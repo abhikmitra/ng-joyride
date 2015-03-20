@@ -50,7 +50,7 @@
 
                     return 'Finish';
                 } else {
-                    return 'Next&nbsp;<i class=\"glyphicon glyphicon-chevron-right\">'
+                    return 'Next&nbsp;<i class=\"glyphicon glyphicon-chevron-right\">';
 
                 }
             }
@@ -156,8 +156,7 @@
             return {
                 generate: generate,
                 cleanUp: cleanUp
-
-            }
+            };
 
 
         })();
@@ -178,7 +177,7 @@
             this.skipDemoFn = skipDemoFn;
             this.goToPrevFn = goToPrevFn;
             this.scope = scope;
-            this.type = "title"
+            this.type = "title";
             this.curtainClass = curtainClass;
             this.addClassToCurtain = addClassToCurtain;
             this.shouldDisablePrevious = shouldDisablePrevious;
@@ -232,7 +231,7 @@
             return {
                 generate: generateTitle,
                 cleanUp: cleanUp
-            }
+            };
 
         })();
 
@@ -250,7 +249,7 @@
                 this.func = config.fn;
             }
 
-            this.type = "function"
+            this.type = "function";
 
 
         }
@@ -271,7 +270,7 @@
                 generate: generateFn,
                 cleanUp: cleanUp,
                 rollback: rollback
-            }
+            };
 
         })();
 
@@ -313,8 +312,8 @@
             return {
                 generate: generateFn,
                 cleanUp: cleanUp,
-                rollback:goToPreviousPath
-            }
+                rollback: goToPreviousPath
+            };
 
         })();
 
@@ -371,13 +370,14 @@
                     currentStepCount -= 1;
 
                     // Rollback previous steps until we hit a title or element.
-                    while ((steps[currentStepCount].type === "location_change" || steps[currentStepCount].type === "function")
-                            && currentStepCount >= 1) {
+                    function rollbackSteps(s, i) {
+                        s[i].rollback();
+                    }
+
+                    while ((steps[currentStepCount].type === "location_change" || steps[currentStepCount].type === "function") && currentStepCount >= 1) {
                         requires_timeout = true;
                         if (steps[currentStepCount].type == "location_change") {
-                            scope.$evalAsync(function () {
-                                steps[currentStepCount].rollback();
-                            })
+                            scope.$evalAsync(rollbackSteps(steps, currentStepCount));
                         }
                         else {
                             steps[currentStepCount].rollback();
@@ -485,7 +485,7 @@
                                 return new joyrideLocationChange(step, count);
 
                             case "element":
-                                disablePrevious = isFirst
+                                disablePrevious = isFirst;
                                 isFirst = isFirst ? false:false;
 
                                 return new joyrideElement(step, count, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1),step.curtainClass,changeCurtainClass, disablePrevious);
