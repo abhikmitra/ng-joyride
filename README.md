@@ -172,6 +172,7 @@ The `element` joyride-element generates a box that looks like below.
 * `placement` ( Optional ) : Where the popover will be placed.Similar to bootstrap popover placements. The possible values are "top|bottom|right|left".
 * `scroll` : Whether you want, the page to be scrolled to the particular element.
 * `curtainClass` ( Optional ) : You can use this to pass your custom class to the joyride background.This is useful where you want the background to change in each step.
+* `attachToBody` ( Optional ) : You can use this to attach the popover to the body instead of the element.In some cases you might run into problems with css stacking context.Normally you wouldn't need to use this
 
 #####&nbsp;&nbsp; Custom `element Template`. Unlike `titleTemplate`, where each `joyride-element` can have its own `titleTemplate` ,the custom element template will have a common template.
 

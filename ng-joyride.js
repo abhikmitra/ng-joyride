@@ -24,7 +24,8 @@
         );
     }]);
     drctv.factory('joyrideElement', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
-        function Element(config, currentStep, template, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn,isEnd, curtainClass , addClassToCurtain, shouldDisablePrevious) {
+        function Element(config, currentStep, template, loadTemplateFn, hasReachedEndFn, goToNextFn,
+                         goToPrevFn, skipDemoFn,isEnd, curtainClass , addClassToCurtain, shouldDisablePrevious, attachTobody) {
             this.currentStep = currentStep;
             this.content = $sce.trustAsHtml(config.text);
             this.selector = config.selector;
@@ -44,6 +45,7 @@
             this.curtainClass = curtainClass;
             this.addClassToCurtain = addClassToCurtain;
             this.shouldDisablePrevious = shouldDisablePrevious;
+            this.attachTobody = attachTobody;
             function _generateTextForNext() {
 
                 if (isEnd) {
@@ -108,7 +110,8 @@
                     content: this.popoverTemplate,
                     html: true,
                     placement: this.placement,
-                    trigger:'manual'
+                    trigger:'manual',
+                    container: this.attachTobody? 'body' : false
                 });
                 if (this.scroll) {
                     _scrollToElement.call(this,this.selector);
@@ -207,9 +210,9 @@
                     $('.nextBtn').html("Next&nbsp;<i class='glyphicon glyphicon-chevron-right'>");
                 }
                 $fkEl.slideDown(100, function () {
-                    $('.nextBtn').one("click",self.goToNextFn);
+                    $('.nextBtn').one("click",function(){ self.goToNextFn(200);});
                     $('.skipBtn').one("click",self.skipDemoFn);
-                    $('.prevBtn').one("click",self.goToPrevFn);
+                    $('.prevBtn').one("click",function(){ self.goToPrevFn(200);});
 
                     if(self.shouldDisablePrevious){
                         $('.prevBtn').prop('disabled', true);
@@ -347,11 +350,14 @@
                     }
                     return $q.when($templateCache.get(template)) || $http.get(template, { cache: true });
                 }
-                function goToNext() {
+                function goToNext(interval) {
                     if (!hasReachedEnd()) {
                         currentStepCount++;
                         cleanUpPreviousStep();
-                        generateStep();
+                        $timeout(function(){
+                            generateStep();
+                        },interval || 0);
+
                     } else {
                         endJoyride();
                         scope.onFinish();
@@ -364,7 +370,7 @@
                         scope.ngJoyRide = false;
                     });
                 }
-                function goToPrev() {
+                function goToPrev(interval) {
                     steps[currentStepCount].cleanUp();
                     var requires_timeout = false;
                     currentStepCount -= 1;
@@ -384,9 +390,9 @@
                         }
                         currentStepCount -= 1;
                     }
-
+                    requires_timeout = requires_timeout || interval;
                     if (requires_timeout) {
-                        $timeout(generateStep, 100);
+                        $timeout(generateStep, interval || 100);
                     }
                     else {
                         generateStep();
@@ -476,7 +482,7 @@
                         config : scope.config,
                         templateUri: attrs.templateUri
                     };
-                    
+
                     var count = -1,isFirst = true,disablePrevious;
                     steps = options.config.map(function (step) {
                         count++;
@@ -488,7 +494,7 @@
                                 disablePrevious = isFirst;
                                 isFirst = isFirst ? false:false;
 
-                                return new joyrideElement(step, count, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1),step.curtainClass,changeCurtainClass, disablePrevious);
+                                return new joyrideElement(step, count, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1),step.curtainClass,changeCurtainClass, disablePrevious ,step.attachToBody);
 
                             case "title":
                                 disablePrevious = isFirst;
