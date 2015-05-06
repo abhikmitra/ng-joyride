@@ -173,6 +173,33 @@ The `element` joyride-element generates a box that looks like below.
 * `scroll` : Whether you want, the page to be scrolled to the particular element.
 * `curtainClass` ( Optional ) : You can use this to pass your custom class to the joyride background.This is useful where you want the background to change in each step.
 * `attachToBody` ( Optional ) : You can use this to attach the popover to the body instead of the element.In some cases you might run into problems with css stacking context.Normally you wouldn't need to use this
+* `elementTemplate` ( Optional ) : delegate which accepts content to be displayed and if it is reached the end of the tour. This will enable you to customize the look and feel of element type just as you can with title type. An example of this is shown below:
+
+```sh
+function _generateTextForNext(isEnd){
+      if (isEnd) {
+        return 'Finish';
+      } else {
+        return 'Next';
+      }
+    }
+
+    function elementTourTemplate(content, isEnd){
+      return '<div class=\"row\"><div id=\"pop-over-text\" class=\"col-md-12\">' + content + '</div></div><hr><div class=\"row\"><div class=\"col-md-4 center\"><a class=\"skipBtn pull-left\" type=\"button\">Skip</a></div><div class=\"col-md-8\"><div class=\"pull-right\"><button id=\"prevBtn\" class=\"prevBtn btn btn-xs\" type=\"button\">Previous</button> <button id=\"nextBtn\" class=\"nextBtn btn btn-xs btn-primary\" type=\"button\">' + _generateTextForNext(isEnd) + '</button></div></div></div>';
+    }
+    
+$scope.config = [
+        {
+                type: "element",
+                selector: "#home",
+                heading: "Title can have <em>HTML</em>",
+                text: "You are in the <em>home page.</em>",
+                placement: "bottom",
+                scroll: true,
+                elementTemplate: elementTourTemplate
+            }
+        ];
+```
 
 #####&nbsp;&nbsp; Custom `element Template`. Unlike `titleTemplate`, where each `joyride-element` can have its own `titleTemplate` ,the custom element template will have a common template.
 
