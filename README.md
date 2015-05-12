@@ -208,7 +208,7 @@ The string returned by "elementTemplate" should have the following placeholders.
 * *Next Button* : a button of id "nextBtn" should be present for previous the user to go back.
 * *Skip Button* : a button of id "skipBtn" should be present for previous the user to go back.
 
-#####&nbsp;&nbsp; `elementTemplate` like `titleTemplate`, where each `joyride-element` can have its own `titleTemplate` ,the custom elementTemplate can be different functions.The below parameter controls
+#####&nbsp;&nbsp;  Each `joyride-element` can have its own `elementTemplate` function .The below parameter controls
 the look and feel of the popover as a whole while the above part controls the look and feel of the "popover-content" section
 
 ```sh
