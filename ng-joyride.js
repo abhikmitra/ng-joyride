@@ -31,9 +31,28 @@
             this.selector = config.selector;
             this.template = template || 'ng-joyride-tplv1.html';
             if(config.elementTemplate){
-              this.popoverTemplate = config.elementTemplate(this.content, isEnd);
+                this.popoverTemplate = config.elementTemplate(this.content, isEnd);
             }else{
-              this.popoverTemplate = '<div class=\"row\"><div id=\"pop-over-text\" class=\"col-md-12\">' + this.content + '</div></div><hr><div class=\"row\"><div class=\"col-md-4 center\"><a class=\"skipBtn pull-left\" type=\"button\">Skip</a></div><div class=\"col-md-8\"><div class=\"pull-right\"><button id=\"prevBtn\" class=\"prevBtn btn btn-xs\" type=\"button\">Previous</button> <button id=\"nextBtn\" class=\"nextBtn btn btn-xs btn-primary\" type=\"button\">' + _generateTextForNext() + '</button></div></div></div>';
+                this.popoverTemplate =
+                    '<div class=\"row\">' +
+                    '<div id=\"pop-over-text\" class=\"col-md-12\">' +
+                    this.content +
+                    '</div>' +
+                    '</div>' +
+                    '<hr>' +
+                    '<div class=\"row\">' +
+                    '<div class=\"col-md-4 center\">' +
+                    '<a class=\"skipBtn pull-left\" type=\"button\">Skip</a>' +
+                    '</div>' +
+                    '<div class=\"col-md-8\">' +
+                    '<div class=\"pull-right\">' +
+                    '<button id=\"prevBtn\" class=\"prevBtn btn btn-xs\" type=\"button\">Previous</button>' +
+                    ' <button id=\"nextBtn\" class=\"nextBtn btn btn-xs btn-primary\" type=\"button\">' +
+                    _generateTextForNext() +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
             }
             this.heading = config.heading;
             this.placement = config.placement;
@@ -346,13 +365,13 @@
 
                 var $fkEl;
                 function waitForAngular(callback) {
-                  try {
-                    var app = angular.element(document.querySelector('body'));
-                    var $browser = app.injector().get('$browser');
-                    $browser.notifyWhenNoOutstandingRequests(callback)
-                  } catch (err) {
-                    callback(err.message);
-                  }
+                    try {
+                        var app = angular.element(document.querySelector('body'));
+                        var $browser = app.injector().get('$browser');
+                        $browser.notifyWhenNoOutstandingRequests(callback)
+                    } catch (err) {
+                        callback(err.message);
+                    }
                 }
 
                 function hasReachedEnd() {
@@ -472,9 +491,9 @@
                     currentStep.generate();
                     if (currentStep.type === "location_change" ||
                         currentStep.type === "function") {
-                      waitForAngular(function () {
-                        goToNext();
-                      });
+                        waitForAngular(function () {
+                            goToNext();
+                        });
                     }
                 }
                 function changeCurtainClass(className){

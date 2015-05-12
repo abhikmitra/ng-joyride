@@ -173,7 +173,9 @@ The `element` joyride-element generates a box that looks like below.
 * `scroll` : Whether you want, the page to be scrolled to the particular element.
 * `curtainClass` ( Optional ) : You can use this to pass your custom class to the joyride background.This is useful where you want the background to change in each step.
 * `attachToBody` ( Optional ) : You can use this to attach the popover to the body instead of the element.In some cases you might run into problems with css stacking context.Normally you wouldn't need to use this
-* `elementTemplate` ( Optional ) : delegate which accepts content to be displayed and if it is reached the end of the tour. This will enable you to customize the look and feel of element type just as you can with title type. An example of this is shown below:
+* `elementTemplate` ( Optional ) : This is a function which receives two arguments (content,isEnd) . content -> The content to display, isEnd -> Is true if its the last step. Return value of the function is used a template.This function controls the look and feel of the popover, that part which is inside the popover-content.
+Can also be used as a delegate which accepts content to be displayed and if it is
+reached the end of the tour. This will enable you to customize the look and feel of element type just as you can with title type. An example of this is shown below:
 
 ```sh
 function _generateTextForNext(isEnd){
@@ -200,17 +202,23 @@ $scope.config = [
             }
         ];
 ```
+The string returned by "elementTemplate" should have the following placeholders.
 
-#####&nbsp;&nbsp; Custom `element Template`. Unlike `titleTemplate`, where each `joyride-element` can have its own `titleTemplate` ,the custom element template will have a common template.
+* *Previous Button* : a button of id "prevBtn" should be present for previous the user to go back.
+* *Next Button* : a button of id "nextBtn" should be present for previous the user to go back.
+* *Skip Button* : a button of id "skipBtn" should be present for previous the user to go back.
+
+#####&nbsp;&nbsp; `elementTemplate` like `titleTemplate`, where each `joyride-element` can have its own `titleTemplate` ,the custom elementTemplate can be different functions.The below parameter controls
+the look and feel of the popover as a whole while the above part controls the look and feel of the "popover-content" section
 
 ```sh
 <div ng-joy-ride="startJoyRide" config="config" template-uri="template.html"></div>
 ``` 
 
-The custom template-uri can be passed as an attribute value to template-uri as shown above.template.html will be loaded asynchronously in the above case.
+The custom template-uri (This is different from the elementTemplate config )can be passed as an attribute value to template-uri as shown above.template.html will be loaded asynchronously in the above case.
 
 
-The custom element template should have the following placeholders.    
+The custom element template (supplied through template-uri) should have the following placeholders.
 
 * *Heading Placeholder* : `{{heading}}` will be replaced by the heading you pass.
 * *popover-title* : `<h3 class="popover-title"></h3>`.An element with class popover-title should be present for bootstrap to identify the popover template.
@@ -223,6 +231,11 @@ The default template for 'element' is .
 ```sh
 "<div class=\"popover ng-joyride sharp-borders\"> <div class=\"arrow\"></div>   <h3 class=\"popover-title sharp-borders\"></h3> <div class=\"popover-content container-fluid\"></div></div>"
 ```
+
+
+The template supplied by template-uri will be same for all the popovers which will be structurally similar.Fine grained control and distinction can be achieved by the "elementTemplate" which can be different for each step
+
+
 ---------
 
 ###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : location_change
