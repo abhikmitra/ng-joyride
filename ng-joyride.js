@@ -14,7 +14,8 @@
 
 
     var defaultTitleTemplate = "ng-joyride-title-tplv1.html";
-    var drctv = angular.module('ngJoyRide', []);
+    var drctv = angular.module('ngJoyRide', []),
+        globalHardcodedCurtainClass = "ng-curtain-class";
     drctv.run(['$templateCache', function ($templateCache) {
         $templateCache.put('ng-joyride-tplv1.html',
             "<div class=\"popover ng-joyride sharp-borders\"> <div class=\"arrow\"></div>   <h3 class=\"popover-title sharp-borders\"></h3> <div class=\"popover-content container-fluid\"></div></div>"
@@ -443,13 +444,9 @@
                     $fkEl = $('#ng-curtain');
                     if (shouldDrop) {
                         if ($fkEl.size() === 0) {
-                            $('body').append('<div id="ng-curtain"></div>');
+                            $('body').append('<div id="ng-curtain" class="'+globalHardcodedCurtainClass+'"></div>');
                             $fkEl = $('#ng-curtain');
                             $fkEl.slideDown(1000);
-                            $fkEl.animate({opacity: 0.5}, 400, '');
-                        } else {
-
-                            $fkEl.animate({opacity: 0.5}, 400, '');
                         }
                     } else {
                         $fkEl.slideUp(100, function () {
@@ -498,6 +495,7 @@
                 }
                 function changeCurtainClass(className){
                     $fkEl.removeClass();
+                    $fkEl.addClass(globalHardcodedCurtainClass);
                     if(className){
                         $fkEl.addClass(className);
                     }
