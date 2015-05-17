@@ -4,7 +4,7 @@
 .ng-joyride .pull-right{
     float:right;
 }
-#ng-curtain{
+.ng-curtain-class{
     position: fixed;
     background: black;
     opacity: 0.5;
