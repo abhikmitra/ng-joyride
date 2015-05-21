@@ -46,6 +46,32 @@ The joyride stops when, the user presses "skip", "finish" or when  you programam
 
 --------
 
+### Joyride Events
+You can bind to certain events in order to control the behaviour of the tour,
+this can be useful when you want a more specific level of interaction, where
+the tour continues by a user action instead of hitting Next.  The following
+events are currently available:
+
+- `joyride:prev`: Go to the previous tour step
+- `joyride:next`: Go to the next tour step
+- `joyride:exit`: Skip & exit the tour
+
+#### Example
+You'll have to use something like jQuery to trigger the events on the element,
+for example, if you've defined the following tour:
+
+```html
+<div id="serverTour" ng-joy-ride="startServerTour" config="serverTourConfig"></div>
+```
+
+You can call the events on it with the following way:
+
+```javascript
+$("#serverTour").trigger("joyride:next")
+```
+
+--------
+
 ### Configuring the joyride
 ####config
 This is the attribute for setting the required steps.In the above example `scope.config` will have the list of `joyride-element` that you can pass through the `config`.    
@@ -171,6 +197,7 @@ The `element` joyride-element generates a box that looks like below.
 * `text` : Text or HTML can be passed
 * `placement` ( Optional ) : Where the popover will be placed.Similar to bootstrap popover placements. The possible values are "top|bottom|right|left".
 * `scroll` : Whether you want, the page to be scrolled to the particular element.
+* `advanceOn` (optional): An action on the page which will move the Joyride to the next step.  It must consist of `element` and `event`.  Example: `{element: '#foo', event: 'click'}`
 * `curtainClass` ( Optional ) : You can use this to pass your custom class to the joyride background.This is useful where you want the background to change in each step.
 * `attachToBody` ( Optional ) : You can use this to attach the popover to the body instead of the element.In some cases you might run into problems with css stacking context.Normally you wouldn't need to use this
 * `elementTemplate` ( Optional ) : This is a function which receives two arguments (content,isEnd) . content -> The content to display, isEnd -> Is true if its the last step. Return value of the function is used a template.This function controls the look and feel of the popover, that part which is inside the popover-content.
