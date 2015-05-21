@@ -81,6 +81,9 @@
                 }
             }
 
+            if (config.advanceOn) {
+                this.advanceOn = config.advanceOn;
+            }
         }
 
         Element.prototype = (function () {
@@ -105,7 +108,7 @@
             function generate() {
                 $fkEl = $(this.selector);
                 _highlightElement.call(this);
-                handleClicksOnElement();
+                bindAdvanceOn(this);
                 this.addClassToCurtain(this.curtainClass);
                 return _generateHtml.call(this).then(angular.bind(this, _generatePopover)).then(angular.bind(this, _showTooltip));
 
@@ -116,9 +119,15 @@
                 event.stopPropagation();
                 event.preventDefault();
             }
-            function handleClicksOnElement(){
-                $fkEl.on("click",stopEvent);
+
+            function bindAdvanceOn(step) {
+                if (step.advanceOn) {
+                    return $(step.advanceOn.element).bind(step.advanceOn.event, step.goToNextFn);
+                }
+
+                return $fkEl.on("click", stopEvent);
             }
+
             function _generateHtml() {
 
                 var promise = this.loadTemplateFn(this.template);
