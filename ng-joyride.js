@@ -531,6 +531,11 @@
                         }
 
                     });
+
+                    // Listen for events
+                    element.on('joyride:prev', goToPrev);
+                    element.on('joyride:next', goToNext);
+                    element.on('joyride:exit', skipDemo);
                 }
             }
         };

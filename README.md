@@ -46,6 +46,32 @@ The joyride stops when, the user presses "skip", "finish" or when  you programam
 
 --------
 
+### Joyride Events
+You can bind to certain events in order to control the behaviour of the tour,
+this can be useful when you want a more specific level of interaction, where
+the tour continues by a user action instead of hitting Next.  The following
+events are currently available:
+
+- `joyride:prev`: Go to the previous tour step
+- `joyride:next`: Go to the next tour step
+- `joyride:exit`: Skip & exit the tour
+
+#### Example
+You'll have to use something like jQuery to trigger the events on the element,
+for example, if you've defined the following tour:
+
+```html
+<div id="serverTour" ng-joy-ride="startServerTour" config="serverTourConfig"></div>
+```
+
+You can call the events on it with the following way:
+
+```javascript
+$("#serverTour").trigger("joyride:next")
+```
+
+--------
+
 ### Configuring the joyride
 ####config
 This is the attribute for setting the required steps.In the above example `scope.config` will have the list of `joyride-element` that you can pass through the `config`.    
