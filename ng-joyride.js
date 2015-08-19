@@ -127,6 +127,13 @@
 
                 return $fkEl.on("click", stopEvent);
             }
+            function unBindAdvanceOn(step) {
+                if (step.advanceOn) {
+                    return $(step.advanceOn.element).unbind(step.advanceOn.event, step.goToNextFn);
+                }
+
+                return $fkEl.on("click", stopEvent);
+            }
 
             function _generateHtml() {
 
@@ -184,6 +191,7 @@
                     $fkEl.off("click",stopEvent);
                     $($fkEl).popover('destroy');
                 }
+                unBindAdvanceOn(this);
 
 
 
