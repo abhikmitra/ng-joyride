@@ -132,7 +132,7 @@
                     return $(step.advanceOn.element).unbind(step.advanceOn.event, step.goToNextFn);
                 }
 
-                return $fkEl.on("click", stopEvent);
+                return $fkEl.off("click", stopEvent);
             }
 
             function _generateHtml() {
