@@ -124,15 +124,19 @@
                 if (step.advanceOn) {
                     return $(step.advanceOn.element).bind(step.advanceOn.event, step.goToNextFn);
                 }
+                if($fkEl){
+                    return $fkEl.on("click", stopEvent);
+                }
 
-                return $fkEl.on("click", stopEvent);
             }
             function unBindAdvanceOn(step) {
                 if (step.advanceOn) {
                     return $(step.advanceOn.element).unbind(step.advanceOn.event, step.goToNextFn);
                 }
+                if($fkEl){
+                    return $fkEl.off("click", stopEvent);
+                }
 
-                return $fkEl.off("click", stopEvent);
             }
 
             function _generateHtml() {
