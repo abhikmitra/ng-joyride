@@ -70,6 +70,7 @@
             this.addClassToCurtain = addClassToCurtain;
             this.shouldDisablePrevious = shouldDisablePrevious;
             this.attachTobody = attachTobody;
+            this.shouldNotStopEvent = config.shouldNotStopEvent || false;
             function _generateTextForNext() {
 
                 if (isEnd) {
@@ -116,8 +117,13 @@
 
             }
             function stopEvent(event){
-                event.stopPropagation();
-                event.preventDefault();
+                if(this.shouldNotStopEvent){
+
+                } else {
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+
             }
 
             function bindAdvanceOn(step) {
@@ -125,7 +131,7 @@
                     return $(step.advanceOn.element).bind(step.advanceOn.event, step.goToNextFn);
                 }
                 if($fkEl){
-                    return $fkEl.on("click", stopEvent);
+                    return $fkEl.on("click", angular.bind(step,stopEvent));
                 }
 
             }
@@ -134,7 +140,7 @@
                     return $(step.advanceOn.element).unbind(step.advanceOn.event, step.goToNextFn);
                 }
                 if($fkEl){
-                    return $fkEl.off("click", stopEvent);
+                    return $fkEl.off("click", angular.bind(step,stopEvent));
                 }
 
             }
@@ -192,7 +198,7 @@
             function cleanUp() {
                 _unhighlightElement.call(this);
                 if($fkEl){
-                    $fkEl.off("click",stopEvent);
+                    $fkEl.off("click",angular.bind(this,stopEvent));
                     $($fkEl).popover('destroy');
                 }
                 unBindAdvanceOn(this);
