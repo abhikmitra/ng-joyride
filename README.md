@@ -197,10 +197,11 @@ The `element` joyride-element generates a box that looks like below.
 * `text` : Text or HTML can be passed
 * `placement` ( Optional ) : Where the popover will be placed.Similar to bootstrap popover placements. The possible values are "top|bottom|right|left".
 * `scroll` : Whether you want, the page to be scrolled to the particular element.
-* `advanceOn` (optional): An action on the page which will move the Joyride to the next step.  It must consist of `element` and `event`.  Example: `{element: '#foo', event: 'click'}`
+* `advanceOn` (Optional): An action on the page which will move the Joyride to the next step.  It must consist of `element` and `event`.  Example: `{element: '#foo', event: 'click'}`
 * `curtainClass` ( Optional ) : You can use this to pass your custom class to the joyride background.This is useful where you want the background to change in each step.
 * `attachToBody` ( Optional ) : You can use this to attach the popover to the body instead of the element.In some cases you might run into problems with css stacking context.Normally you wouldn't need to use this
 * `elementTemplate` ( Optional ) : This is a function which receives two arguments (content,isEnd) . content -> The content to display, isEnd -> Is true if its the last step. Return value of the function is used a template.This function controls the look and feel of the popover, that part which is inside the popover-content.
+* `shouldNotStopEvent` ( Optional ) : This should be set to true if you don't want event generated on the selected element should be allowed to propagate. This should be rarely needed as you normally would not want user to click on a button a trigger actions out of joyride.If you are looking to move the joyride forward when user does an action other than next, use advanceOn
 Can also be used as a delegate which accepts content to be displayed and if it is
 reached the end of the tour. This will enable you to customize the look and feel of element type just as you can with title type. An example of this is shown below:
 
