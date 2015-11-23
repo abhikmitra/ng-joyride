@@ -502,6 +502,9 @@
                         elem.cleanUp();
                     });
                     dropCurtain(false);
+                    element.off('joyride:prev');
+                    element.off('joyride:next');
+                    element.off('joyride:exit');
                 }
                 function cleanUpPreviousStep() {
                     if(currentStepCount!==0){
