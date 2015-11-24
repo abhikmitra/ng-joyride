@@ -218,6 +218,14 @@
     }]);
     drctv.factory('joyrideTitle', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
 
+        function setNextBtnText(isEnd){
+            if (isEnd) {
+                $('.nextBtn').text("Finish");
+            } else {
+                $('.nextBtn').html("Next&nbsp;<i class='glyphicon glyphicon-chevron-right'>");
+            }
+        }
+
         function Title(config, currentStep, scope, loadTemplateFn, hasReachedEndFn, goToNextFn, goToPrevFn, skipDemoFn, curtainClass, addClassToCurtain, shouldDisablePrevious) {
 
             this.currentStep = currentStep;
@@ -226,6 +234,7 @@
             this.titleMainDiv = '<div class="ng-joyride-title"></div>';
             this.loadTemplateFn = loadTemplateFn;
             this.titleTemplate = config.titleTemplate || defaultTitleTemplate;
+            this.setNextBtnTextFn = config.setNextBtnTextFn || setNextBtnText;
             this.hasReachedEndFn = hasReachedEndFn;
             this.goToNextFn = goToNextFn;
             this.skipDemoFn = skipDemoFn;
@@ -249,17 +258,13 @@
 
 
             }
-
+            
             function _compilePopover(html) {
                 var self = this;
                 this.scope.heading = this.heading;
                 this.scope.content = this.content;
                 $fkEl.html($compile(html)(this.scope));
-                if (this.hasReachedEndFn()) {
-                    $('.nextBtn').text("Finish");
-                } else {
-                    $('.nextBtn').html("Next&nbsp;<i class='glyphicon glyphicon-chevron-right'>");
-                }
+                this.setNextBtnTextFn(this.hasReachedEndFn());
                 $fkEl.slideDown(100, function () {
                     $('.nextBtn').one("click",function(){ self.goToNextFn(200);});
                     $('.skipBtn').one("click",self.skipDemoFn);
