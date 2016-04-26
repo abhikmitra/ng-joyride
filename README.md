@@ -18,6 +18,16 @@ You can install this package through `Bower` by using the following command :
 ```sh
 bower install ng-joyride --save
 ```
+
+Add the js and stylesheet to your project.
+
+```sh
+<link href="/bower_components/ng-joyride/ng-joyride.css" rel="stylesheet">
+
+<script src="/bower_components/ng-joyride/ng-joyride.js"></script>
+```
+
+
 Add it to your module.
 
 ```sh
