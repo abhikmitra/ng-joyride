@@ -153,10 +153,10 @@
 
             }
 
-            function _generatePopover(html) {
+            function _generatePopover(response) {
                 $fkEl.popover({
                     title: this.heading,
-                    template: html,
+                    template: response.data,
                     content: this.popoverTemplate,
                     html: true,
                     placement: this.placement,
@@ -250,11 +250,11 @@
 
             }
 
-            function _compilePopover(html) {
+            function _compilePopover(response) {
                 var self = this;
                 this.scope.heading = this.heading;
                 this.scope.content = this.content;
-                $fkEl.html($compile(html.data)(this.scope));
+                $fkEl.html($compile(response.data)(this.scope));
                 if (this.hasReachedEndFn()) {
                     $('.nextBtn').text("Finish");
                 } else {
