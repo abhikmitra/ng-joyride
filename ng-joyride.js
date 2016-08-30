@@ -470,7 +470,7 @@
                     var curtain;
                     $fkEl = $('#ng-curtain');
                     if (shouldDrop) {
-                        if ($fkEl.size() === 0) {
+                        if ($fkEl.length === 0) {
                             $('body').append('<div id="ng-curtain" class="'+globalHardcodedCurtainClass+'"></div>');
                             $fkEl = $('#ng-curtain');
                             $fkEl.slideDown(1000);
