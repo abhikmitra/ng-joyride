@@ -254,7 +254,7 @@
                 var self = this;
                 this.scope.heading = this.heading;
                 this.scope.content = this.content;
-                $fkEl.html($compile(html.data)(this.scope));
+                $fkEl.html($compile(html)(this.scope));
                 if (this.hasReachedEndFn()) {
                     $('.nextBtn').text("Finish");
                 } else {
@@ -409,7 +409,7 @@
                     if (!template) {
                         return '';
                     }
-                    return $http.get(template, { cache: $templateCache });
+                    return $q.when($templateCache.get(template)) || $http.get(template, { cache: true });
                 }
                 function goToNext(interval) {
                     if (!hasReachedEnd()) {
@@ -470,7 +470,7 @@
                     var curtain;
                     $fkEl = $('#ng-curtain');
                     if (shouldDrop) {
-                        if ($fkEl.size() === 0) {
+                        if ($fkEl.length === 0) {
                             $('body').append('<div id="ng-curtain" class="'+globalHardcodedCurtainClass+'"></div>');
                             $fkEl = $('#ng-curtain');
                             $fkEl.slideDown(1000);
