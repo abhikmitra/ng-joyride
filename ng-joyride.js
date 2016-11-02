@@ -230,6 +230,10 @@
             this.goToNextFn = goToNextFn;
             this.skipDemoFn = skipDemoFn;
             this.goToPrevFn = goToPrevFn;
+            this.finishBtnText = config.finishBtnText || 'Finish';
+            this.prevBtnText = config.prevBtnText || 'Previous';
+            this.skipBtnText = config.skipBtnText || 'Skip';
+            this.nextBtnText = config.nextBtnText || 'Next';
             this.scope = scope;
             this.type = "title";
             this.curtainClass = curtainClass;
@@ -246,8 +250,6 @@
                 this.addClassToCurtain(this.curtainClass);
                 var promise = this.loadTemplateFn(this.titleTemplate);
                 promise.then(angular.bind(this,_compilePopover));
-
-
             }
 
             function _compilePopover(html) {
@@ -255,11 +257,13 @@
                 this.scope.heading = this.heading;
                 this.scope.content = this.content;
                 $fkEl.html($compile(html.data)(this.scope));
+
                 if (this.hasReachedEndFn()) {
-                    $('.nextBtn').text("Finish");
+                    $('.nextBtn').text(this.finishBtnText);
                 } else {
-                    $('.nextBtn').html("Next&nbsp;<i class='glyphicon glyphicon-chevron-right'>");
+                    $('.nextBtn').html(this.nextBtnText + "&nbsp;<i class='glyphicon glyphicon-chevron-right'>");
                 }
+
                 $fkEl.slideDown(100, function () {
                     $('.nextBtn').one("click",function(){ self.goToNextFn(200);});
                     $('.skipBtn').one("click",self.skipDemoFn);
@@ -268,8 +272,6 @@
                     if(self.shouldDisablePrevious){
                         $('.prevBtn').prop('disabled', true);
                     }
-
-
                 });
             }
 
@@ -390,7 +392,6 @@
                 var steps = [];
                 var currentStepCount = 0;
 
-
                 var $fkEl;
                 function waitForAngular(callback) {
                     try {
@@ -405,12 +406,14 @@
                 function hasReachedEnd() {
                     return currentStepCount === (steps.length - 1);
                 }
+
                 function loadTemplate(template) {
                     if (!template) {
                         return '';
                     }
                     return $http.get(template, { cache: $templateCache });
                 }
+
                 function goToNext(interval) {
                     if (!hasReachedEnd()) {
                         currentStepCount++;
@@ -424,6 +427,7 @@
                         scope.onFinish();
                     }
                 }
+
                 function endJoyride() {
                     steps[currentStepCount].cleanUp();
                     dropCurtain(false);
@@ -431,6 +435,7 @@
                         scope.ngJoyRide = false;
                     });
                 }
+
                 function goToPrev(interval) {
                     steps[currentStepCount].cleanUp();
                     var requires_timeout = false;
@@ -479,10 +484,7 @@
                         $fkEl.slideUp(100, function () {
                             $fkEl.remove();
                         });
-
                     }
-
-
                 }
 
                 scope.$watch('ngJoyRide', function (newval, oldval) {
@@ -497,6 +499,7 @@
                         destroyJoyride();
                     }
                 });
+
                 function destroyJoyride(){
                     steps.forEach(function(elem){
                         elem.cleanUp();
@@ -506,6 +509,7 @@
                     element.off('joyride:next');
                     element.off('joyride:exit');
                 }
+
                 function cleanUpPreviousStep() {
                     if(currentStepCount!==0){
                         steps[currentStepCount-1].cleanUp();
@@ -523,6 +527,7 @@
                         });
                     }
                 }
+
                 function changeCurtainClass(className){
                     $fkEl.removeClass();
                     $fkEl.addClass(globalHardcodedCurtainClass);
@@ -531,6 +536,7 @@
                     }
 
                 }
+
                 function initializeJoyride() {
                     var options = {
                         config : scope.config,
@@ -569,9 +575,6 @@
                 }
             }
         };
-
-
     }]);
-
 
 })(angular);

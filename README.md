@@ -152,6 +152,10 @@ $scope.config = [
         {
                 type: "title",
                 heading: "Welcome to the NG-Joyride demo",
+                finishBtnText: 'Finish',
+                prevBtnText: 'Previous',
+                skipBtnText: 'Skip',
+                nextBtnText: 'Next',
                 text: '<div class="row"><div id="title-text" class="col-md-12"><span class="main-text">Welcome to <strong>Ng Joyride Demo</strong></span><br><span>( This demo will walk you through the features of Ng-Joyride. )</span><br/><br/><span class="small"><em>This can have custom html too !!!</em></span></div></div>'
                  curtainClass : 'myCustomClass' //this is optional.
             }
