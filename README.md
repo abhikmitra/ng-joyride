@@ -118,7 +118,7 @@ Each element of the array should be a proper joyride element.There are 4 types o
 * **function** - A function call . The function call will be done.Through this you can render more DOM or open a modal etc
 * **location_change** - This will change the location using `$location.path` incase the joyride needs to be across different pages of your website.    
                       
-
+####For title and Element type there is 'step' variable in the template's scope, which is the current step.You can use it as a bridge
 ####Elaborate details of each of the Joyride Elements are at the end   
 
 --------
@@ -153,8 +153,6 @@ $scope.config = [
                 type: "title",
                 heading: "Welcome to the NG-Joyride demo",
                 finishBtnText: 'Finish',
-                prevBtnText: 'Previous',
-                skipBtnText: 'Skip',
                 nextBtnText: 'Next',
                 text: '<div class="row"><div id="title-text" class="col-md-12"><span class="main-text">Welcome to <strong>Ng Joyride Demo</strong></span><br><span>( This demo will walk you through the features of Ng-Joyride. )</span><br/><br/><span class="small"><em>This can have custom html too !!!</em></span></div></div>'
                  curtainClass : 'myCustomClass' //this is optional.
@@ -196,6 +194,8 @@ $scope.config = [
         {
                 type: "element",
                 selector: "#home",
+                finishBtnText: 'Finish',
+                nextBtnText: 'Next',
                 heading: "Title can have <em>HTML</em>",
                 text: "You are in the <em>home page.</em>",
                 placement: "bottom",

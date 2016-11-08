@@ -15,45 +15,45 @@
 
     var defaultTitleTemplate = "ng-joyride-title-tplv1.html";
     var drctv = angular.module('ngJoyRide', []),
-        globalHardcodedCurtainClass = "ng-curtain-class";
+      globalHardcodedCurtainClass = "ng-curtain-class";
     drctv.run(['$templateCache', function ($templateCache) {
         $templateCache.put('ng-joyride-tplv1.html',
-            "<div class=\"popover ng-joyride sharp-borders\"> <div class=\"arrow\"></div>   <h3 class=\"popover-title sharp-borders\"></h3> <div class=\"popover-content container-fluid\"></div></div>"
+          "<div class=\"popover ng-joyride sharp-borders\"> <div class=\"arrow\"></div><h3 class=\"popover-title sharp-borders\"></h3> <div class=\"popover-content container-fluid\"></div></div>"
         );
         $templateCache.put('ng-joyride-title-tplv1.html',
-            "<div id=\"ng-joyride-title-tplv1\"><div class=\"ng-joyride sharp-borders intro-banner\" style=\"\"><div class=\"popover-inner\"><h3 class=\"popover-title sharp-borders\">{{heading}}</h3><div class=\"popover-content container-fluid\"><div ng-bind-html=\"content\"></div><hr><div class=\"row\"><div class=\"col-md-4 skip-class\"><a class=\"skipBtn pull-left\" type=\"button\"><i class=\"glyphicon glyphicon-ban-circle\"></i>&nbsp; Skip</a></div><div class=\"col-md-8\"><div class=\"pull-right\"><button class=\"prevBtn btn\" type=\"button\"><i class=\"glyphicon glyphicon-chevron-left\"></i>&nbsp;Previous</button> <button id=\"nextTitleBtn\" class=\"nextBtn btn btn-primary\" type=\"button\">Next&nbsp;<i class=\"glyphicon glyphicon-chevron-right\"></i></button></div></div></div></div></div></div></div>"
+          "<div id=\"ng-joyride-title-tplv1\"><div class=\"ng-joyride sharp-borders intro-banner\" style=\"\"><div class=\"popover-inner\"><h3 class=\"popover-title sharp-borders\">{{heading}}</h3><div class=\"popover-content container-fluid\"><div ng-bind-html=\"content\"></div><hr><div class=\"row\"><div class=\"col-md-4 skip-class\"><a class=\"skipBtn pull-left\" type=\"button\"><i class=\"glyphicon glyphicon-ban-circle\"></i>&nbsp; Skip</a></div><div class=\"col-md-8\"><div class=\"pull-right\"><button class=\"prevBtn btn\" type=\"button\"><i class=\"glyphicon glyphicon-chevron-left\"></i>&nbsp;Previous</button> <button id=\"nextTitleBtn\" class=\"nextBtn btn btn-primary\" type=\"button\">Next&nbsp;<i class=\"glyphicon glyphicon-chevron-right\"></i></button></div></div></div></div></div></div></div>"
         );
     }]);
     drctv.factory('joyrideElement', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
-        function Element(config, currentStep, template, loadTemplateFn, hasReachedEndFn, goToNextFn,
-                         goToPrevFn, skipDemoFn,isEnd, curtainClass , addClassToCurtain, shouldDisablePrevious, attachTobody) {
+        function Element(config, currentStep, scope, template, loadTemplateFn, hasReachedEndFn, goToNextFn,
+                         goToPrevFn, skipDemoFn, isEnd, curtainClass , addClassToCurtain, shouldDisablePrevious, attachTobody) {
             this.currentStep = currentStep;
             this.content = $sce.trustAsHtml(config.text);
             this.selector = config.selector;
             this.template = template || 'ng-joyride-tplv1.html';
             if(config.elementTemplate){
                 this.popoverTemplate = config.elementTemplate(this.content, isEnd);
-            }else{
+            } else {
                 this.popoverTemplate =
-                    '<div class=\"row\">' +
-                    '<div id=\"pop-over-text\" class=\"col-md-12\">' +
-                    this.content +
-                    '</div>' +
-                    '</div>' +
-                    '<hr>' +
-                    '<div class=\"row\">' +
-                    '<div class=\"col-md-4 center\">' +
-                    '<a class=\"skipBtn pull-left\" type=\"button\">Skip</a>' +
-                    '</div>' +
-                    '<div class=\"col-md-8\">' +
-                    '<div class=\"pull-right\">' +
-                    '<button id=\"prevBtn\" class=\"prevBtn btn btn-xs\" type=\"button\">Previous</button>' +
-                    ' <button id=\"nextBtn\" class=\"nextBtn btn btn-xs btn-primary\" type=\"button\">' +
-                    _generateTextForNext() +
-                    '</button>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>';
+                  '<div class=\"row\">' +
+                  '<div id=\"pop-over-text\" class=\"col-md-12\">' +
+                  this.content +
+                  '</div>' +
+                  '</div>' +
+                  '<hr>' +
+                  '<div class=\"row\">' +
+                  '<div class=\"col-md-4 center\">' +
+                  '<a class=\"skipBtn pull-left\" type=\"button\">Skip</a>' +
+                  '</div>' +
+                  '<div class=\"col-md-8\">' +
+                  '<div class=\"pull-right\">' +
+                  '<button id=\"prevBtn\" class=\"prevBtn btn btn-xs\" type=\"button\">Previous</button>' +
+                  ' <button id=\"nextBtn\" class=\"nextBtn btn btn-xs btn-primary\" type=\"button\">' +
+                  _generateTextForNext() +
+                  '</button>' +
+                  '</div>' +
+                  '</div>' +
+                  '</div>';
             }
             this.heading = config.heading;
             this.placement = config.placement;
@@ -64,6 +64,10 @@
             this.goToNextFn = goToNextFn;
             this.skipDemoFn = skipDemoFn;
             this.goToPrevFn = goToPrevFn;
+            this.finishBtnText = config.finishBtnText || 'Finish';
+            this.nextBtnText = config.nextBtnText || 'Next';
+            this.scope       = scope;
+            this.step        = config;
             this.hasReachedEndFn = hasReachedEndFn;
             this.type = "element";
             this.curtainClass = curtainClass;
@@ -71,14 +75,12 @@
             this.shouldDisablePrevious = shouldDisablePrevious;
             this.attachTobody = attachTobody;
             this.shouldNotStopEvent = config.shouldNotStopEvent || false;
+
             function _generateTextForNext() {
-
                 if (isEnd) {
-
-                    return 'Finish';
+                    return this.finishBtnText;
                 } else {
-                    return 'Next&nbsp;<i class=\"glyphicon glyphicon-chevron-right\">';
-
+                    return this.nextBtnText + '&nbsp;<i class=\"glyphicon glyphicon-chevron-right\">';
                 }
             }
 
@@ -91,14 +93,15 @@
             var $fkEl;
 
             function _showTooltip() {
-                var self =this;
+                var self = this;
                 $timeout(function () {
                     $fkEl.popover('show');
                     $timeout(function () {
 
-                        $('.nextBtn').one("click",self.goToNextFn);
-                        $('.prevBtn').one("click",self.goToPrevFn);
-                        $('.skipBtn').one("click",self.skipDemoFn);
+                        $('.nextBtn').one("click", self.goToNextFn);
+                        $('.prevBtn').one("click", self.goToPrevFn);
+                        $('.skipBtn').one("click", self.skipDemoFn);
+
                         if(self.shouldDisablePrevious){
                             $('.prevBtn').prop('disabled', true);
                         }
@@ -111,11 +114,10 @@
                 _highlightElement.call(this);
                 bindAdvanceOn(this);
                 this.addClassToCurtain(this.curtainClass);
+
                 return _generateHtml.call(this).then(angular.bind(this, _generatePopover)).then(angular.bind(this, _showTooltip));
-
-
-
             }
+
             function stopEvent(event){
                 if(this.shouldNotStopEvent){
 
@@ -135,6 +137,7 @@
                 }
 
             }
+
             function unBindAdvanceOn(step) {
                 if (step.advanceOn) {
                     return $(step.advanceOn.element).unbind(step.advanceOn.event, step.goToNextFn);
@@ -146,25 +149,25 @@
             }
 
             function _generateHtml() {
-
                 var promise = this.loadTemplateFn(this.template);
                 return promise;
-
-
             }
 
             function _generatePopover(html) {
+                this.scope.step = this.step;
+
                 $fkEl.popover({
                     title: this.heading,
                     template: html,
-                    content: this.popoverTemplate,
+                    content: $compile(this.popoverTemplate)(this.scope),
                     html: true,
                     placement: this.placement,
                     trigger:'manual',
-                    container: this.attachTobody? 'body' : false
+                    container: this.attachTobody ? 'body' : false
                 });
+
                 if (this.scroll) {
-                    _scrollToElement.call(this,this.selector);
+                    _scrollToElement.call(this, this.selector);
                 }
             }
 
@@ -190,21 +193,15 @@
                     $fkEl.removeClass(this.staticClass);
                     $fkEl.removeClass(this.nonStaticClass);
                 }
-
-
-
             }
 
             function cleanUp() {
                 _unhighlightElement.call(this);
                 if($fkEl){
-                    $fkEl.off("click",angular.bind(this,stopEvent));
+                    $fkEl.off("click", angular.bind(this, stopEvent));
                     $($fkEl).popover('destroy');
                 }
                 unBindAdvanceOn(this);
-
-
-
             }
 
             return {
@@ -231,9 +228,8 @@
             this.skipDemoFn = skipDemoFn;
             this.goToPrevFn = goToPrevFn;
             this.finishBtnText = config.finishBtnText || 'Finish';
-            this.prevBtnText = config.prevBtnText || 'Previous';
-            this.skipBtnText = config.skipBtnText || 'Skip';
             this.nextBtnText = config.nextBtnText || 'Next';
+            this.step        = config;
             this.scope = scope;
             this.type = "title";
             this.curtainClass = curtainClass;
@@ -249,14 +245,16 @@
                 $('body').append($fkEl);
                 this.addClassToCurtain(this.curtainClass);
                 var promise = this.loadTemplateFn(this.titleTemplate);
-                promise.then(angular.bind(this,_compilePopover));
+                promise.then(angular.bind(this, _compilePopover));
             }
 
             function _compilePopover(html) {
                 var self = this;
                 this.scope.heading = this.heading;
                 this.scope.content = this.content;
-                $fkEl.html($compile(html.data)(this.scope));
+                this.scope.step = this.step;
+
+                $fkEl.html($compile(html)(this.scope));
 
                 if (this.hasReachedEndFn()) {
                     $('.nextBtn').text(this.finishBtnText);
@@ -265,9 +263,9 @@
                 }
 
                 $fkEl.slideDown(100, function () {
-                    $('.nextBtn').one("click",function(){ self.goToNextFn(200);});
-                    $('.skipBtn').one("click",self.skipDemoFn);
-                    $('.prevBtn').one("click",function(){ self.goToPrevFn(200);});
+                    $('.nextBtn').one("click", function(){ self.goToNextFn(200);});
+                    $('.skipBtn').one("click", self.skipDemoFn);
+                    $('.prevBtn').one("click", function(){ self.goToPrevFn(200);});
 
                     if(self.shouldDisablePrevious){
                         $('.prevBtn').prop('disabled', true);
@@ -293,7 +291,6 @@
 
         return Title;
 
-
     }]);
     drctv.factory('joyrideFn', ['$timeout', '$compile', '$sce', function ($timeout, $compile, $sce) {
 
@@ -306,8 +303,6 @@
             }
 
             this.type = "function";
-
-
         }
 
         Fn.prototype = (function () {
@@ -340,8 +335,7 @@
             this.path = config.path;
             this.currentStep = currentStep;
             this.prevPath = "";
-            this.type = "location_change"
-            ;
+            this.type = "location_change";
 
         }
 
@@ -374,8 +368,6 @@
         })();
 
         return LocationChange;
-
-
     }]);
 
     drctv.directive('ngJoyRide', ['$http', '$timeout', '$location', '$window', '$templateCache', '$q' , '$compile', '$sce', 'joyrideFn', 'joyrideTitle', 'joyrideElement', 'joyrideLocationChange', function ($http, $timeout, $location, $window, $templateCache, $q, $compile, $sce, joyrideFn, joyrideTitle, joyrideElement, joyrideLocationChange) {
@@ -386,7 +378,6 @@
                 'config': '=',
                 'onFinish': '&',
                 'onSkip': '&'
-
             },
             link: function (scope, element, attrs) {
                 var steps = [];
@@ -411,7 +402,8 @@
                     if (!template) {
                         return '';
                     }
-                    return $http.get(template, { cache: $templateCache });
+                    return $q.when($templateCache.get(template)) || $http.get(template, { cache: $templateCache });
+                    //return $http.get(template, { cache: $templateCache });
                 }
 
                 function goToNext(interval) {
@@ -521,7 +513,7 @@
                     var currentStep = steps[currentStepCount];
                     currentStep.generate();
                     if (currentStep.type === "location_change" ||
-                        currentStep.type === "function") {
+                      currentStep.type === "function") {
                         waitForAngular(function () {
                             goToNext();
                         });
@@ -554,7 +546,7 @@
                                 disablePrevious = isFirst;
                                 isFirst = isFirst ? false:false;
 
-                                return new joyrideElement(step, count, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1),step.curtainClass,changeCurtainClass, disablePrevious ,step.attachToBody);
+                                return new joyrideElement(step, count, scope, options.templateUri, loadTemplate, hasReachedEnd, goToNext, goToPrev, skipDemo, count === (options.config.length-1),step.curtainClass,changeCurtainClass, disablePrevious ,step.attachToBody);
 
                             case "title":
                                 disablePrevious = isFirst;
