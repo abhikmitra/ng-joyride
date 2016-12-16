@@ -177,7 +177,7 @@ The `title` element generates a box that looks like below.
 
 * *Heading Placeholder* : `{{heading}}` will be replaced by the heading you pass.
 * *Content Placeholder* : `<div ng-bind-html="content"></div>` should be present in your template so that it can be populated by the template.
-* *Skip Joyride Placeholder* : `<a class="skipBtn"></a>` should be present as the class selector `skipBtn` is ysed to detect whether the user skipped the joyride.
+* *Skip Joyride Placeholder* : `<a class="skipBtn"></a>` should be present as the class selector `skipBtn` is used to detect whether the user skipped the joyride.
 * *Previous Button Placeholder* : `<a class="prevBtn"></a>` should be present as the class selector `prevBtn` is used to detect whether the user pressed on previous step. 
 * *Next Button Placeholder* : `<a class="nextBtn"></a>` should be present as the class selector `nextBtn` is used to detect whether the user pressed on next step.  
 
