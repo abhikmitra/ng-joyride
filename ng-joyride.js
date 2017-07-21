@@ -475,7 +475,8 @@
                     var curtain;
                     $fkEl = $('#ng-curtain');
                     if (shouldDrop) {
-                        if ($fkEl.size() === 0) {
+			// jQuery 3 support with length
+                        if (($fkEl.size && $fkEl.size() === 0) || $fkEl.length === 0) {
                             $('body').append('<div id="ng-curtain" class="'+globalHardcodedCurtainClass+'"></div>');
                             $fkEl = $('#ng-curtain');
                             $fkEl.slideDown(1000);
