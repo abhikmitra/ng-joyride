@@ -5,14 +5,14 @@ An angular directive that provides the "joyride" functionality for introducing y
 
 ![ng-joyride](http://oi59.tinypic.com/2u7omdd.jpg)    
 
-###Demo   
+### Demo   
 
 See [the demo page](http://abhikmitra.github.io/ng-joyride-demo/#/) for a demo and the overview of the features.
 
 
 Installation
 --------------
-###Bower
+### Bower
 You can install this package through `Bower` by using the following command :
 
 ```sh
@@ -51,7 +51,7 @@ There is one directive called `ng-joy-ride` which can be used as an attribute.
 ### Starting the Joyride   
 
 
-####ng-joy-ride   
+#### ng-joy-ride   
 You can invoke the joyride from anywhere by setting (in this case) `startJoyRide` to true.The scope variable that you bind to `ng-joy-ride` is the one that will control the start of the joyride. Once the joyride is complete , the scope variable gets set to false.So on completeion of the joyride `startJoyRide` will be set to false     
 
 
@@ -88,7 +88,7 @@ $("#serverTour").trigger("joyride:next")
 --------
 
 ### Configuring the joyride
-####config
+#### config
 This is the attribute for setting the required steps.In the above example `scope.config` will have the list of `joyride-element` that you can pass through the `config`.    
 Example
 
@@ -119,7 +119,7 @@ Each element of the array should be a proper joyride element.There are 4 types o
 * **location_change** - This will change the location using `$location.path` incase the joyride needs to be across different pages of your website.    
                       
 
-####Elaborate details of each of the Joyride Elements are at the end   
+#### Elaborate details of each of the Joyride Elements are at the end   
 
 --------
 
@@ -144,7 +144,7 @@ You see this repo [sample repo](https://github.com/abhikmitra/ng-joyride-demo) f
 ## Joyride-Element Descriptions    
 
 
-###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : Title
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : Title
 
 
 ```sh
@@ -165,14 +165,14 @@ $scope.config = [
 The `title` element generates a box that looks like below.
 
 ![ng-joyride](http://oi62.tinypic.com/2d9zs0k.jpg)   
-####Properties
+#### Properties
 
 * `heading` : Custom heading that you want the title box to have.
 * `text` : Text or HTML can be passed
 * `titleTemplate` ( Optional ) : You can pass a templateURL that can be used in case you don't want the default template.This will be a url that can be loaded either from the $templateCache or through AJAX if its not present in the cache.
 * `curtainClass` ( Optional ) : You can use this to pass your custom class to the joyride background.This is useful where you want the background to change in each step.
    
-#####&nbsp;&nbsp; Custom `titleTemplate`. The custom title template should have the following placeholder.    
+##### &nbsp;&nbsp; Custom `titleTemplate`. The custom title template should have the following placeholder.    
 
 
 * *Heading Placeholder* : `{{heading}}` will be replaced by the heading you pass.
@@ -189,7 +189,7 @@ The default template for 'title' is .
 ```
 ---------
 
-###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : Element  
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : Element  
 
 ```sh
 $scope.config = [
@@ -208,7 +208,7 @@ $scope.config = [
 The `element` joyride-element generates a box that looks like below.
 
 ![ng-joyride](http://oi58.tinypic.com/vxyk1w.jpg)   
-####Properties
+#### Properties
 
 * `type` : Should be a string `element`
 * `selector` : Any jquery selector can be passed here.
@@ -256,7 +256,7 @@ The string returned by "elementTemplate" should have the following placeholders.
 * *Next Button* : a button of id "nextBtn" should be present for previous the user to go back.
 * *Skip Button* : a button of id "skipBtn" should be present for previous the user to go back.
 
-#####&nbsp;&nbsp;  Each `joyride-element` can have its own `elementTemplate` function .The below parameter controls
+##### &nbsp;&nbsp;  Each `joyride-element` can have its own `elementTemplate` function .The below parameter controls
 the look and feel of the popover as a whole while the above part controls the look and feel of the "popover-content" section
 
 ```sh
@@ -286,7 +286,7 @@ The template supplied by template-uri will be same for all the popovers which wi
 
 ---------
 
-###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : location_change
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : location_change
 
 This is required where your intro content spans over multiple pages and you want joyride to be across multiple pages.
 
@@ -300,7 +300,7 @@ $scope.config = [
 ```
 
 Immediately after changing the location, the next `joyride-element` is called. 
-####Properties
+#### Properties
 
 * `type` : Should be a string `location_change`
 * `path` : The path to navigate to should be passed here.The path needs to be a part of the same app.
@@ -309,7 +309,7 @@ Immediately after changing the location, the next `joyride-element` is called.
 
 ---------
 
-###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : function
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type : function
 
 This is required where your need to run some function for your dom element to get generated.
 
@@ -332,7 +332,7 @@ For eg :
 
 This is important, for the 'previous' button to work .
 
-####Properties
+#### Properties
 
 * `type` : Should be a string `function`
 * `fn` : pass the actual function reference.Or you can pass a function name as string. If you pass a string then it will be resolved on the scope .
