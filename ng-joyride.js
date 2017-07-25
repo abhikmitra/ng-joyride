@@ -131,7 +131,11 @@
                     return $(step.advanceOn.element).bind(step.advanceOn.event, step.goToNextFn);
                 }
                 if($fkEl){
-                    return $fkEl.on("click", angular.bind(step,stopEvent));
+                	var stopEventFn = angular.bind(step,stopEvent); 
+                	if(!$fkEl.stopEventFn)
+                		$fkEl.stopEventFn = new Array();
+                	$fkEl.stopEventFn[step.currentStep] = stopEventFn;
+                    return $fkEl.on("click", stopEventFn);
                 }
 
             }
@@ -140,7 +144,7 @@
                     return $(step.advanceOn.element).unbind(step.advanceOn.event, step.goToNextFn);
                 }
                 if($fkEl){
-                    return $fkEl.off("click", angular.bind(step,stopEvent));
+                	return $fkEl.off("click", $fkEl.stopEventFn[step.currentStep]);
                 }
 
             }
